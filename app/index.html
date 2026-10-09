@@ -1208,7 +1208,9 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
   function read(){ var n=Date.now();
     if(cache.doc && (n-cache.t)<4000) return Promise.resolve(cache.doc);
     lastErr='';
-    function once(){ return readAll(); }
+    function withTimeout(p,ms){ return new Promise(function(ok,no){ var d=0; var t=setTimeout(function(){ if(!d){ d=1; no(new Error('timeout')); } },ms);
+      p.then(function(v){ if(!d){ d=1; clearTimeout(t); ok(v); } }, function(e){ if(!d){ d=1; clearTimeout(t); no(e); } }); }); }
+    function once(){ return withTimeout(readAll(), 8000); }
     return once().catch(function(e){ lastErr=String((e&&e.message)||e).slice(0,70); return null; })
       .then(function(a){ if(a) return a;
         return new Promise(function(ok){ setTimeout(ok,2000); }).then(once).catch(function(e){ lastErr=String((e&&e.message)||e).slice(0,70); return null; }); })
@@ -1249,7 +1251,7 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
      +'<div style="border:1px solid #3a2f12;border-radius:14px;padding:14px;background:#141108;font-size:14px;line-height:1.9">'
      +'Name: <b>'+esc(o.name||'')+'</b><br>Email (your login ID): <b>'+esc(o.email||'')+'</b><br>Application ID: <b>'+esc((item&&item.app_id)||'')+'</b><br>Status: <b>'+(ok?'waiting for the owner approval':'not sent to the server')+'</b></div>'
      +'<p style="color:#cdb98a;font-size:13.5px;line-height:1.75">'+(ok
-       ? 'Your application is with the owner now. The owner approves it on their phone. Then come back to this page and log in with your <b>email</b> and your <b>password</b>.'
+       ? 'Your application is sent. If the owner does not see it within a minute, tap "Copy application text" and send it to the owner on WhatsApp. The owner approves it on their phone. Then come back to this page and log in with your <b>email</b> and your <b>password</b>.'
        : 'The server could not be reached, so this application is saved only inside this phone. Copy the text below and send it to the owner on WhatsApp; the owner will add you and tell you your number.')+'</p>'
      +'<button id="bf-copy" style="width:100%;margin-top:6px;padding:12px;border:1px solid #b8860b;border-radius:12px;background:#0b0b0b;color:#f7d774;font-weight:600">Copy application text</button>'
      +'<div id="bf-copybox" style="display:none;margin-top:10px;font-family:monospace;font-size:12px;color:#cdb98a;word-break:break-all"></div>'
@@ -1297,7 +1299,7 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
     if(MODE==='off'){ bar('Server sync: <b>OFF</b> \u2014 applications stay only on this phone.'); return; }
     bar('Server sync: checking\u2026');
     read(true).then(function(items){ var apps=(items||[]).filter(function(x){ return x.kind==='app'; }); var n=merge(items);
-      bar('Server sync: <b>'+(lastErr?'ERROR':'ON')+'</b> \u00b7 applications waiting on the server: <b>'+apps.length+'</b>'+((lastErr)?' \u00b7 reason: <b>'+esc(lastErr)+'</b>':' \u00b7 checked '+nowISO())
+      bar('Server sync: <b>'+(lastErr?'ERROR':'ON')+'</b> \u00b7 applications waiting on the server: <b>'+apps.length+'</b>'+((lastErr)?' \u00b7 reason: <b>'+esc(lastErr)+'</b> \u00b7 <b>Applications from other phones are not reaching this phone right now. Ask the member to tap "Copy application text" and send it to you on WhatsApp, then add them with "Add one member".</b>':' \u00b7 checked '+nowISO())
         +' <button id="bf-syncbtn" style="margin-left:6px;padding:5px 11px;border:1px solid #b8860b;border-radius:8px;background:#0b0b0b;color:#f7d774;font-weight:600">Refresh now</button>');
       var b=document.getElementById('bf-syncbtn');
       if(b) b.addEventListener('click', function(){ cache.doc=null; autoTry=0; window.renderAdmin(); });
