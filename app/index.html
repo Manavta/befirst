@@ -235,6 +235,7 @@ img,svg,video{max-width:100%;height:auto}
       <input id="a-num" inputmode="numeric" placeholder="e.g. 1">
       <label>token share</label>
       <input id="a-tok" inputmode="numeric" value="3690">
+      <p class="hint">Standard share = 3,690 per member. Change it only if you really want a different amount.</p>
       <label>name (optional)</label>
       <input id="a-name" placeholder="e.g. Ram Kumar">
       <label>Email (optional)</label>
@@ -251,8 +252,8 @@ img,svg,video{max-width:100%;height:auto}
       <h2>Many members at once</h2>
       <p class="hint" style="margin-top:0">Each line: number, tokens, name, email, password, wallet — leave out what you do not have.</p>
       <textarea id="a-bulk" placeholder="1, 3690, Ram Kumar, ram@example.com, pass1234
-2, 3690, Sita Devi
-3, 5000"></textarea>
+2, 3690, Sita Devi, sita@example.com
+3, 3690, Amit Sharma, amit@example.com"></textarea>
       <div class="row">
         <button class="gold" id="a-bulkbtn">Add all</button>
         <button class="gh" id="a-csv">Choose CSV file</button>
@@ -913,8 +914,8 @@ function renderAdmin() {
     L.innerHTML = '<div class="item"><div class="g"><div class="t1">No members right now</div><div class="t2">You can fill a sample with the button below</div></div></div>' +
       '<div style="padding:12px"><button class="gh" id="a-demo">Fill 3 sample (test) members</button></div>';
     $('#a-demo').addEventListener('click', function () {
-      var r = BF.bulkAdd('1, 3690, Ram Kumar, ram@example.com, member1234\n2, 3690, Sita Devi, sita@example.com, member1234\n3, 5000, Amit Sharma, amit@example.com, member1234');
-      toast(r.msg); renderAdmin();
+      var r = BF.bulkAdd('1, 3690, Ram Kumar, ram@example.com, member1234\n2, 3690, Sita Devi, sita@example.com, member1234\n3, 3690, Amit Sharma, amit@example.com, member1234');
+      toast(r.msg + ' \u2014 TEST data (all 3,690 each). Clear it before real use.'); renderAdmin();
     });
     return;
   }
