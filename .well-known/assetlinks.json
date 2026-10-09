@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "net.bitfirst.members",
+    "sha256_cert_fingerprints": ["8B:3E:CE:EF:55:07:3D:0E:93:6F:64:ED:7E:AC:AE:48:19:63:1C:73:57:11:74:A4:14:F9:50:C0:76:01:8D:7F"]
+  }
+}]
