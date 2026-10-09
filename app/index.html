@@ -1181,5 +1181,137 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
   window.openMember=function(id){ _o(id); tools(id); };
 })();
 </script>
+
+<script>
+/* bf-sync-v1 : BITFIRST shared applications */
+(function(){
+  var KEY='bitfirst_pwa_v1', MODE='log', URL='', TOPIC='bitfirst-apps-yszkgf7';
+  var cache={t:0,doc:null};
+  function S(){ try{ return BF.S(); }catch(e){ return null; } }
+  function low(x){ return String(x==null?'':x).toLowerCase().trim(); }
+  function nowISO(){ var d=new Date(); function p(n){ return (n<10?'0':'')+n; } return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); }
+  function saveNow(){ try{ localStorage.setItem(KEY, JSON.stringify(BF.S())); }catch(e){} }
+  function readAll(){
+    if(MODE==='log'){ return fetch('https://ntfy.sh/'+TOPIC+'/json?poll=1&since=12h&t='+Date.now(),{cache:'no-store'})
+        .then(function(r){ return r.text(); }).then(function(t){ var out=[];
+          String(t||'').split('\n').forEach(function(line){ if(!line) return;
+            try{ var m=JSON.parse(line); if(!m||!m.message) return; var o=JSON.parse(m.message); if(o&&o.kind) out.push(o); }catch(e){} });
+          return out; }); }
+    return fetch(URL+(URL.indexOf('?')<0?'?':'&')+'t='+Date.now(),{cache:'no-store'})
+      .then(function(r){ return r.text(); }).then(function(t){ try{ var a=JSON.parse(t); return (a&&a.length)?a:[]; }catch(e){ return []; } });
+  }
+  function writeAll(items){
+    if(MODE==='log') return Promise.resolve();
+    return fetch(URL,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(items.slice(-400))})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r; });
+  }
+  function read(){ var n=Date.now();
+    if(cache.doc && (n-cache.t)<4000) return Promise.resolve(cache.doc);
+    return readAll().then(function(a){ cache.doc=a||[]; cache.t=n; return cache.doc; }).catch(function(){ return cache.doc||[]; }); }
+  function send(item){
+    if(MODE==='log') return fetch('https://ntfy.sh/'+TOPIC,{method:'POST',body:JSON.stringify(item)})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); cache.doc=null; return r; });
+    return readAll().then(function(a){ a=(a||[]).filter(function(x){ return !(x.kind==='app'&&item.kind==='app'&&low(x.email)===low(item.email)); });
+      a.push(item); cache.doc=a; return writeAll(a); });
+  }
+  function merge(items){
+    var s=S(); if(!s) return false; if(!s.pending) s.pending=[]; var ch=false;
+    var rej={}; (items||[]).forEach(function(x){ if(x.kind==='reject'&&x.email) rej[low(x.email)]=1; });
+    Object.keys(rej).forEach(function(e){ var b=s.pending.length; s.pending=s.pending.filter(function(p){ return low(p.email)!==e; }); if(s.pending.length!==b) ch=true; });
+    (items||[]).forEach(function(a){ if(a.kind!=='app'||!a.email) return; if(rej[low(a.email)]) return;
+      if(s.pending.some(function(p){ return low(p.email)===low(a.email); })) return;
+      if(s.members.some(function(m){ return low(m.email)===low(a.email); })) return;
+      s.pending.push({ id:s.nextId++, name:a.name||'', email:a.email, addr:a.addr||'', pass:a.pass||'', sec:a.sec||null, at:a.at||nowISO(), app_id:a.app_id||'' }); ch=true; });
+    (items||[]).forEach(function(m){ if(m.kind!=='member'||!m.email) return; if(rej[low(m.email)]) return;
+      if(s.members.some(function(x){ return low(x.email)===low(m.email)||String(x.num)===String(m.num); })) return;
+      s.members.push({ id:s.nextId++, num:String(m.num), name:m.name||'', email:m.email, tokens:m.tokens||3690, pass:m.pass||'',
+        wallets:(m.addr?[m.addr]:[]), primary:m.addr||'', locked:false, approved:false, claimed:0, is_admin:false, created:m.at||nowISO(), sec:m.sec||null });
+      s.pending=s.pending.filter(function(p){ return low(p.email)!==low(m.email); }); ch=true; });
+    if(ch) saveNow();
+    return ch;
+  }
+  function bar(html){ try{ var v=document.getElementById('v-admin'); if(!v) return;
+    var el=document.getElementById('bf-syncbar');
+    if(!el){ el=document.createElement('div'); el.id='bf-syncbar'; el.style.cssText='margin:0 0 12px;padding:10px 12px;border:1px solid #3a2f12;border-radius:12px;background:#141108;color:#cdb98a;font-size:12px;line-height:1.7'; v.insertBefore(el, v.firstChild); }
+    el.innerHTML=html; }catch(e){} }
+  function panel(o, ok, item){
+    var w=document.createElement('div'); w.id='bf-sent';
+    w.style.cssText='position:fixed;inset:0;z-index:300;background:radial-gradient(900px 520px at 50% -8%,#2b2106 0%,#0b0b0b 62%);overflow:auto;padding:26px 18px 40px;color:#f5e9c8';
+    w.innerHTML='<div style="max-width:520px;margin:0 auto">'
+     +'<div style="text-align:center;font-size:46px;line-height:1">'+(ok?'\u2705':'\u26a0\ufe0f')+'</div>'
+     +'<div style="text-align:center;font-size:12px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;margin-top:8px">'+(ok?'Application sent':'Saved on this phone only')+'</div>'
+     +'<h2 style="text-align:center;color:#f7d774;font-family:Georgia,serif;margin:8px 0 14px">'+(ok?'You are in the queue':'Tell the owner by hand')+'</h2>'
+     +'<div style="border:1px solid #3a2f12;border-radius:14px;padding:14px;background:#141108;font-size:14px;line-height:1.9">'
+     +'Name: <b>'+esc(o.name||'')+'</b><br>Email (your login ID): <b>'+esc(o.email||'')+'</b><br>Application ID: <b>'+esc((item&&item.app_id)||'')+'</b><br>Status: <b>'+(ok?'waiting for the owner approval':'not sent to the server')+'</b></div>'
+     +'<p style="color:#cdb98a;font-size:13.5px;line-height:1.75">'+(ok
+       ? 'Your application is with the owner now. The owner approves it on their phone. Then come back to this page and log in with your <b>email</b> and your <b>password</b>.'
+       : 'The server could not be reached, so this application is saved only inside this phone. Copy the text below and send it to the owner on WhatsApp; the owner will add you and tell you your number.')+'</p>'
+     +'<button id="bf-copy" style="width:100%;margin-top:6px;padding:12px;border:1px solid #b8860b;border-radius:12px;background:#0b0b0b;color:#f7d774;font-weight:600">Copy application text</button>'
+     +'<div id="bf-copybox" style="display:none;margin-top:10px;font-family:monospace;font-size:12px;color:#cdb98a;word-break:break-all"></div>'
+     +'<button id="bf-sent-ok" style="width:100%;margin-top:10px;padding:14px;border:0;border-radius:12px;background:linear-gradient(160deg,#f7d774,#b8860b);color:#0b0b0b;font-weight:700;font-size:15px">Back to login</button>'
+     +'</div>';
+    document.body.appendChild(w);
+    var txt='BITFIRST application | name: '+(o.name||'')+' | email: '+(o.email||'')+' | id: '+((item&&item.app_id)||'')+' | please add me as a member';
+    document.getElementById('bf-copy').addEventListener('click', function(){ try{ if(navigator.clipboard) navigator.clipboard.writeText(txt); }catch(e){}
+      document.getElementById('bf-copybox').style.display='block'; document.getElementById('bf-copybox').textContent=txt; toast('Text ready'); });
+    document.getElementById('bf-sent-ok').addEventListener('click', function(){ try{ w.parentNode.removeChild(w); }catch(e){} show('login'); });
+  }
+  var _reg=BF.register;
+  BF.register=function(o){
+    var r=_reg.call(BF,o), email=low(o.email||'');
+    var p=null; try{ p=BF.S().pending.filter(function(x){ return String(x.id)===String(r&&r.id); })[0]; }catch(e){}
+    var dup = !(r&&r.ok) && /already pending/i.test((r&&r.msg)||'');
+    if(dup){ try{ p=BF.S().pending.filter(function(x){ return low(x.email)===email; })[0]; }catch(e){} }
+    if((r&&r.ok)||dup){
+      var item={kind:'app', app_id:'app-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6), name:(o.name||(p&&p.name)||''), email:email,
+        addr:(o.addr||(p&&p.addr)||''), pass:(p&&p.pass)||'', sec:(p&&p.sec)||null, at:nowISO()};
+      if(p){ p.app_id=item.app_id; saveNow(); }
+      if(MODE==='off'){ panel(o,false,item); return r; }
+      send(item).then(function(){ panel(o,true,item); }).catch(function(){ panel(o,false,item); });
+      return dup?{ok:true,msg:'Application sent.'}:r;
+    }
+    return r;
+  };
+  var _appr=BF.approvePending;
+  BF.approvePending=function(id){
+    var r=_appr.call(BF,id);
+    if(r&&r.ok&&MODE!=='off'){ try{ var m=BF.S().members.filter(function(x){ return String(x.num)===String(r.num); })[0];
+      if(m&&m.email) send({kind:'member', num:m.num, name:m.name||'', email:low(m.email), tokens:m.tokens, pass:m.pass||'', addr:m.primary||'', sec:m.sec||null, at:nowISO()}).catch(function(){}); }catch(e){} }
+    return r;
+  };
+  var _rej=BF.rejectPending;
+  BF.rejectPending=function(id){
+    var email=''; try{ BF.pendingList().forEach(function(x){ if(String(x.id)===String(id)) email=low(x.email); }); }catch(e){}
+    var r=_rej.call(BF,id);
+    if(r&&r.ok&&MODE!=='off'&&email) send({kind:'reject', email:email, at:nowISO()}).catch(function(){});
+    return r;
+  };
+  var _ra=window.renderAdmin;
+  window.renderAdmin=function(){
+    _ra.apply(null,arguments);
+    if(MODE==='off'){ bar('Server sync: <b>OFF</b> \u2014 applications stay only on this phone.'); return; }
+    bar('Server sync: checking\u2026');
+    read().then(function(items){ var apps=(items||[]).filter(function(x){ return x.kind==='app'; }); var n=merge(items);
+      bar('Server sync: <b>ON</b> \u00b7 applications waiting on the server: <b>'+apps.length+'</b> \u00b7 checked '+nowISO()
+        +' <button id="bf-syncbtn" style="margin-left:6px;padding:5px 11px;border:1px solid #b8860b;border-radius:8px;background:#0b0b0b;color:#f7d774;font-weight:600">Refresh now</button>');
+      var b=document.getElementById('bf-syncbtn');
+      if(b) b.addEventListener('click', function(){ cache.doc=null; window.renderAdmin(); });
+      if(n) _ra.apply(null,arguments); });
+  };
+  function loadPull(){
+    if(MODE==='off') return;
+    read().then(function(items){ var n=merge(items);
+      try{ var em=low(localStorage.getItem('bf_remember_user')||'');
+        if(em){ var s=BF.S();
+          var isMem=s.members.some(function(m){ return low(m.email)===em; });
+          var isP=s.pending.some(function(p){ return low(p.email)===em; });
+          var v=document.getElementById('v-login'); var t=document.getElementById('bf-statusline');
+          if(v&&!t){ t=document.createElement('p'); t.id='bf-statusline'; t.className='hint'; v.appendChild(t); }
+          if(t) t.innerHTML=isMem?'\u2705 Your application is <b>approved</b> \u2014 log in now with your email and password.':(isP?'\u23f3 Your application is <b>waiting for the owner approval</b>.':''); } }catch(e){}
+      if(n){ try{ render(); }catch(e){} } });
+  }
+  setTimeout(loadPull, 1200);
+})();
+</script>
 </body>
 </html>
