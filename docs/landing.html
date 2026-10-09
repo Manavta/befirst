@@ -37,6 +37,12 @@ a.ghost{border:1px solid var(--line);color:var(--gold);background:#100d05;paddin
 footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px;text-align:center}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+
+/* bf-overflow-guard */
+html,body{max-width:100%;overflow-x:hidden}
+.wrap,.grid2>*{min-width:0;max-width:100%}
+img,svg,video,iframe{max-width:100%;height:auto}
+body{overflow-wrap:break-word}
 </style></head><body><div class="wrap">
 <div class="hero">
   <div class="coin">&#165;</div>
@@ -53,8 +59,8 @@ footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:v
     <span class="badge">Licence <b>MIT</b></span>
   </div>
   <div class="cta" style="justify-content:center">
-    <a class="btn" href="app/index.html">Open the member app &rarr;</a>
-    <a class="ghost" href="docs/whitepaper.pdf">Read the whitepaper</a>
+    <a class="btn" href="../app/index.html">Open the member app &rarr;</a>
+    <a class="ghost" href="whitepaper.pdf">Read the whitepaper</a>
   </div>
 </div>
 

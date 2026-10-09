@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BITFIRST">
+<title>BITFIRST Member App</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230B0B0B'/%3E%3Ctext x='96' y='136' font-size='116' text-anchor='middle' fill='%23D4AF37' font-family='Georgia,serif'%3E%C2%A5%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230B0B0B'/%3E%3Ctext x='96' y='136' font-size='116' text-anchor='middle' fill='%23D4AF37' font-family='Georgia,serif'%3E%C2%A5%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--gold:#D4AF37;--gold2:#F0D67A;--bg:#0B0B0B;--card:#141414;--line:#2a2a2a;--tx:#EFEFEF;--mut:#9a9a9a;--ok:#3ddc84;--bad:#ff5c5c;--warn:#ffb648}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--tx);
+ font-family:'Noto Sans Devanagari',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5}
+body{padding-bottom:40px}
+header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0B0B0B,#141414);
+ border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:10px}
+header .logo{width:34px;height:34px;border-radius:10px;background:#000;border:1px solid var(--gold);
+ display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:21px;font-family:Georgia,serif}
+header .ttl{font-family:Georgia,'Times New Roman',serif;letter-spacing:.5px;font-size:18px;color:var(--gold2)}
+header .ttl small{display:block;font-family:inherit;font-size:11px;color:var(--mut);letter-spacing:1px}
+header .sp{flex:1}
+main{max-width:640px;margin:0 auto;padding:14px}
+section.hide{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 12px;font-size:18px;color:var(--gold2);font-family:Georgia,serif;letter-spacing:.3px}
+.card h3{margin:16px 0 8px;font-size:15px;color:var(--gold2)}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+input,textarea,select{width:100%;background:#0f0f0f;color:var(--tx);border:1px solid var(--line);
+ border-radius:11px;padding:12px;font-size:16px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--gold)}
+textarea{min-height:96px;font-size:14px;line-height:1.45}
+button{border:1px solid var(--line);background:#1b1b1b;color:var(--tx);border-radius:11px;
+ padding:12px 14px;font-size:15px;font-family:inherit;cursor:pointer;width:100%;margin-top:10px}
+button:active{transform:scale(.99)}
+button.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#111;font-weight:700;border-color:var(--gold)}
+button.gh{background:transparent;border-color:var(--gold);color:var(--gold)}
+button.dn{border-color:#5a2020;color:#ff9a9a}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>button{width:auto;flex:1;min-width:120px}
+.hero{background:linear-gradient(160deg,#191919,#0f0f0f);border:1px solid var(--gold);border-radius:16px;padding:16px;margin-bottom:14px}
+.hero .lbl{font-size:12px;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+.hero .big{font-size:26px;font-weight:700;color:var(--gold2);line-height:1.25;margin:2px 0}
+.hero .nm{font-size:17px;margin-top:2px}
+.pill{display:inline-block;font-size:12.5px;border-radius:999px;padding:5px 11px;margin:6px 6px 0 0;border:1px solid var(--line)}
+.pill.ok{border-color:#2b6b45;color:var(--ok);background:#0e1a13}
+.pill.bad{border-color:#6b2b2b;color:var(--bad);background:#1a0e0e}
+.pill.warn{border-color:#6b5a2b;color:var(--warn);background:#1a170e}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:#101010;border:1px solid var(--line);border-radius:13px;padding:11px}
+.stat .k{font-size:11.5px;color:var(--mut)}
+.stat .v{font-size:19px;font-weight:700;color:var(--gold2);margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:500;font-size:12px}
+td b{color:var(--gold2)}
+.list{border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.item{display:flex;gap:10px;align-items:center;padding:11px 12px;border-bottom:1px solid var(--line);background:#101010}
+.item:last-child{border-bottom:none}
+.item .n{width:30px;height:30px;border-radius:9px;background:#000;border:1px solid var(--line);
+ display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gold2);flex:0 0 auto}
+.item .g{flex:1;min-width:0}
+.item .g .t1{font-size:14.5px}
+.item .g .t2{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .rt{text-align:right;flex:0 0 auto}
+.item .rt .tk{font-size:13.5px;color:var(--gold2);font-weight:700}
+.item .rt .wb{font-size:11px;color:var(--mut)}
+.bar{height:8px;background:#0f0f0f;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:8px 0 4px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0}
+.hint{font-size:12.5px;color:var(--mut);margin:8px 0 0}
+.warn{font-size:12.5px;color:var(--warn);background:#1a170e;border:1px solid #4a3f1e;border-radius:10px;padding:9px 11px;margin-top:10px}
+.okbox{font-size:12.5px;color:var(--ok);background:#0e1a13;border:1px solid #23503a;border-radius:10px;padding:9px 11px;margin-top:10px}
+#toast{position:fixed;left:50%;transform:translate(-50%,140%);bottom:18px;z-index:60;max-width:92%;
+ background:#1d1d1d;border:1px solid var(--gold);color:var(--tx);padding:12px 14px;border-radius:13px;
+ font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.6);transition:transform .28s ease}
+#toast.show{transform:translate(-50%,0)}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+#modal.hide{display:none}
+#sheet{background:var(--card);border:1px solid var(--gold);border-width:1px 1px 0;border-radius:18px 18px 0 0;
+ width:100%;max-width:640px;max-height:88vh;overflow:auto;padding:16px 16px 26px}
+#sheet h2{margin:0 0 4px;font-size:18px;color:var(--gold2);font-family:Georgia,serif}
+.audit{font-size:12px;color:var(--mut);border-bottom:1px solid var(--line);padding:6px 0}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;word-break:break-all}
+footer{max-width:640px;margin:0 auto;padding:4px 14px 24px;color:#6f6f6f;font-size:11.5px;text-align:center}
+.pw{position:relative}
+.pw input{padding-right:46px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:#ffd76e;padding:0;margin:0}
+.eye:active{opacity:.6}
+  select{width:100%;padding:12px;background:#141414;color:#e8e8e8;border:1px solid #2b2b2b;border-radius:10px;font-size:15px;margin:4px 0 12px}
+  .qbox{margin:6px 0 12px;padding:12px;border:1px solid #2b2b2b;border-radius:10px;background:#141414;color:var(--gold2);font-weight:600}
+
+/* bf-overflow-guard */
+html,body{max-width:100%;overflow-x:hidden}
+img,svg,video{max-width:100%;height:auto}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">¥</div>
+  <div class="ttl">BITFIRST<small>Member app · offline</small></div>
+  <div class="sp"></div>
+  <button id="btn-install" class="gh hide" style="width:auto;margin:0;padding:8px 11px;font-size:13px">📲 Add to home screen</button>
+  <button id="btn-out" class="hide" style="width:auto;margin:0;padding:8px 11px;font-size:13px">Log out</button>
+</header>
+
+<main>
+  <!-- ================= Log in ================= -->
+  <section id="v-login" class="hide">
+    <div class="card">
+      <h2>Member login</h2>
+      <label>Username (Owner, member number, or email)</label>
+      <input id="login-user" type="text" inputmode="text" autocomplete="username" placeholder="Owner, 1, or ram@example.com">
+      <label>Password</label>
+      <div class="pw"><input id="login-pass" type="password" autocomplete="current-password" placeholder="••••••••"><button type="button" class="eye" data-eye="login-pass" title="Show / hide">👁</button></div>
+      <label style="display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:13.5px;color:#cdb98a;font-weight:500"><input type="checkbox" id="login-remember" style="width:auto;margin:0"> Save my username on this phone</label>
+      <button class="gold" id="login-btn">Log in</button>
+      <button class="gh" id="go-forgot" style="margin-top:10px">Forgot password?</button>
+      <p class="hint">Members can enter their <b>number</b> (e.g. 1) or <b>email</b> (e.g. ram@example.com). For the owner, type <b>Owner</b> (or <b>0</b>).</p>
+      <button class="gold" id="go-register" style="margin-top:14px">Create new member (register) →</button>
+      <div class="warn">Never enter a private key or seed phrase in this box — the app rejects such input automatically.</div>
+    </div>
+  </section>
+
+  <!-- ================= registration ================= -->
+  <section id="v-register" class="hide">
+    <div class="card">
+      <h2>Create new member</h2>
+      <p class="hint" style="margin-top:0">Fill the form → the owner approves → then your number and tokens are set. <b>No fee, no money.</b></p>
+      <label>Full name</label>
+      <input id="r-name" placeholder="e.g. Ram Kumar">
+      <label>Email (this is your login ID)</label>
+      <input id="r-mail" inputmode="email" placeholder="ram@example.com">
+      <label>Wallet address (optional — you can add it later)</label>
+      <input id="r-addr" class="mono" placeholder="0x...">
+      <label>Create your password (4 or more characters)</label>
+      <div class="pw"><input id="r-pass" name="new-password" type="password" autocomplete="new-password" placeholder="••••••••"><button type="button" class="eye" data-eye="r-pass" title="Show / hide">👁</button></div>
+      <label>Password again</label>
+      <div class="pw"><input id="r-pass2" name="new-password2" type="password" autocomplete="new-password" placeholder="••••••••"><button type="button" class="eye" data-eye="r-pass2" title="Show / hide">👁</button></div>
+      <label>Security question (for password recovery \u2014 recommended)</label>
+      <select id="r-q">
+        <option value="What is your mother's name?">What is your mother's name?</option>
+        <option value="What was the name of your first school?">What was the name of your first school?</option>
+        <option value="What city were you born in?">What city were you born in?</option>
+        <option value="What is your favourite colour?">What is your favourite colour?</option>
+        <option value="What is your pet's name?">What is your pet's name?</option>
+        <option value="__own__">My own question\u2026</option>
+      </select>
+      <input id="r-qown" placeholder="Type your own question (only if you chose the last option)">
+      <label>Your answer</label>
+      <input id="r-a" placeholder="answer \u2014 e.g. Kamla">
+      <button class="gold" id="r-send">Send application</button>
+      <button class="gh" id="r-back">Back to login</button>
+      <div class="warn">Never enter a private key or seed phrase. Enter only your wallet <b>address</b>, never a key.</div>
+    </div>
+  </section>
+
+  <!-- ================= forgot password ================= -->
+  <section id="v-forgot" class="hide">
+    <div class="card">
+      <h2>Forgot password</h2>
+      <p class="hint" style="margin-top:0">Step 1 \u2014 enter your member number or email.</p>
+      <label>Username (Owner, member number, or email)</label>
+      <input id="f-user" placeholder="Owner, 1, or ram@example.com">
+      <button class="gold" id="f-find">Find my account</button>
+      <div id="f-step2" class="hide">
+        <h3>Step 2 \u2014 answer your security question</h3>
+        <div id="f-q" class="qbox"></div>
+        <label>Your answer</label>
+        <input id="f-ans" placeholder="your answer">
+        <label>New password (4 or more characters)</label>
+        <div class="pw"><input id="f-p1" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="f-p1" title="Show / hide">\ud83d\udc41</button></div>
+        <label>New password again</label>
+        <div class="pw"><input id="f-p2" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="f-p2" title="Show / hide">\ud83d\udc41</button></div>
+        <button class="gold" id="f-go">Reset password</button>
+      </div>
+      <button class="gh" id="f-back">Back to login</button>
+      <div class="warn">No security question on your account? Then only the owner can set a new password \u2014 admin panel \u2192 tap your member \u2192 Set new password. This app has no email server, so an emailed reset link is not possible.</div>
+    </div>
+  </section>
+
+  <!-- ================= Member ================= -->
+  <section id="v-member" class="hide">
+    <div class="hero" id="m-hero"></div>
+    <div class="card">
+      <h2>My withdrawal</h2>
+      <div id="m-claim"></div>
+    </div>
+    <div class="card">
+      <h2>My account</h2>
+      <table id="m-info"></table>
+    </div>
+    <div class="card">
+      <h2>Community vault</h2>
+      <table id="m-vault"></table>
+    </div>
+    <div class="card">
+      <h2>Change my password</h2>
+      <label>Current password</label>
+      <div class="pw"><input id="m-old" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="m-old" title="Show / hide">\ud83d\udc41</button></div>
+      <label>New password (4 or more characters)</label>
+      <div class="pw"><input id="m-p1" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="m-p1" title="Show / hide">\ud83d\udc41</button></div>
+      <label>New password again</label>
+      <div class="pw"><input id="m-p2" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="m-p2" title="Show / hide">\ud83d\udc41</button></div>
+      <button class="gold" id="m-passbtn">Change password</button>
+    </div>
+    <div class="card">
+      <h2>Password recovery</h2>
+      <div id="m-sec"></div>
+    </div>
+  </section>
+
+  <!-- ================= admin ================= -->
+  <section id="v-admin" class="hide">
+    <div class="stats" id="a-stats"></div>
+
+    <div class="card">
+      <h2>Launch date (day count)</h2>
+      <label>Date (YYYY-MM-DD)</label>
+      <input id="a-launch" type="date">
+      <p class="hint" id="a-dayinfo"></p>
+      <div class="row">
+        <button class="gh" id="a-today">Start from today</button>
+        <button class="gh" id="a-setdate">Set date</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Add one member</h2>
+      <label>Member number (digits only)</label>
+      <input id="a-num" inputmode="numeric" placeholder="e.g. 1">
+      <label>token share</label>
+      <input id="a-tok" inputmode="numeric" value="3690">
+      <label>name (optional)</label>
+      <input id="a-name" placeholder="e.g. Ram Kumar">
+      <label>Email (optional)</label>
+      <input id="a-mail" inputmode="email" placeholder="ram@example.com">
+      <label>Wallet address (optional, 0x + 40 characters)</label>
+      <input id="a-addr" class="mono" placeholder="0x...">
+      <label>Password</label>
+      <div class="pw"><input id="a-pass" type="password" placeholder="at least 8 characters"><button type="button" class="eye" data-eye="a-pass" title="Show / hide">👁</button></div>
+      <button class="gold" id="a-add">Add member</button>
+      <p class="hint">Enter only the number + share first; the wallet can be added later too.</p>
+    </div>
+
+    <div class="card">
+      <h2>Many members at once</h2>
+      <p class="hint" style="margin-top:0">Each line: number, tokens, name, email, password, wallet — leave out what you do not have.</p>
+      <textarea id="a-bulk" placeholder="1, 3690, Ram Kumar, ram@example.com, pass1234
+2, 3690, Sita Devi
+3, 5000"></textarea>
+      <div class="row">
+        <button class="gold" id="a-bulkbtn">Add all</button>
+        <button class="gh" id="a-csv">Choose CSV file</button>
+      </div>
+      <input type="file" id="a-csvfile" accept=".csv,text/csv,text/plain" style="display:none">
+    </div>
+
+    <div class="card">
+      <h2>New applications (approval pending) <span id="a-pendcount" style="font-size:14px;color:var(--gold2)"></span></h2>
+      <div id="a-pend"><p class="hint">No new applications right now.</p></div>
+      <p class="hint">Tap any application → approve or reject.</p>
+    </div>
+
+    <div class="card">
+      <h2>Member list</h2>
+      <div class="row">
+        <button class="gh" id="a-mergeall">Merge/lock all wallets</button>
+      </div>
+      <div class="list" id="a-list" style="margin-top:12px"></div>
+      <p class="hint">Tap any member → address, merge/lock, permission, password — all in one place.</p>
+    </div>
+
+    <div class="card">
+      <h2>Change owner password</h2>
+      <label>Current password</label>
+      <div class="pw"><input id="a-old" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="a-old" title="Show / hide">\ud83d\udc41</button></div>
+      <label>New password (4 or more characters)</label>
+      <div class="pw"><input id="a-p1" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="a-p1" title="Show / hide">\ud83d\udc41</button></div>
+      <label>New password again</label>
+      <div class="pw"><input id="a-p2" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="a-p2" title="Show / hide">\ud83d\udc41</button></div>
+      <button class="gold" id="a-passbtn">Change owner password</button>
+      <p class="hint">The owner logs in with member number <b>0</b>. Write this password down somewhere offline.</p>
+    </div>
+
+    <div class="card">
+      <h2>Backup (keep data safe)</h2>
+      <p class="hint" style="margin-top:0">Data stays only on this phone. Take a backup at least once a day or week.</p>
+      <div class="row">
+        <button class="gh" id="a-exp">Show backup</button>
+        <button class="gh" id="a-imp">Load backup</button>
+      </div>
+      <input type="file" id="a-impfile" accept=".json,application/json" style="display:none">
+      <button class="dn" id="a-reset">Clear all data (risk)</button>
+    </div>
+
+    <div class="card">
+      <h2>Recent activity</h2>
+      <div id="a-audit"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  BITFIRST Member App · All data stays only on your phone (localStorage) · no internet, no email, no fee
+</footer>
+
+<div id="toast"></div>
+<div id="modal" class="hide"><div id="sheet"></div></div>
+
+<script>/* BITFIRST — core (crypto + storage + rules). Everything stays inside the phone. */
+var BF = (function () {
+  'use strict';
+  var KEY = 'bitfirst_pwa_v1', LOCK_DAYS = 180, VAULT = 184500000, DEFAULT_ALLOC = 3690, ADMIN_PASS = '';
+
+  /* ---------- SHA-256 (runs fully inside the phone) ---------- */
+  function rr(x, n) { return (x >>> n) | (x << (32 - n)); }
+  var K = (function () { var k = [], n = 2, c = {}; while (k.length < 64) { if (!c[n]) { for (var i = n * n; i < 313; i += n) c[i] = 1; k.push((Math.pow(n, 1 / 3) * 4294967296) | 0); } n++; } return k; })();
+  var H0 = (function () { var h = [], n = 2, c = {}; while (h.length < 8) { if (!c[n]) { for (var i = n * n; i < 313; i += n) c[i] = 1; h.push((Math.pow(n, 0.5) * 4294967296) | 0); } n++; } return h; })();
+  function utf8(s) {
+    var o = '', i, c;
+    for (i = 0; i < s.length; i++) {
+      c = s.charCodeAt(i);
+      if (c < 128) o += String.fromCharCode(c);
+      else if (c < 2048) o += String.fromCharCode(192 | (c >> 6), 128 | (c & 63));
+      else if (c < 55296 || c > 57343) o += String.fromCharCode(224 | (c >> 12), 128 | ((c >> 6) & 63), 128 | (c & 63));
+      else { var c2 = s.charCodeAt(++i), cp = 65536 + (((c & 1023) << 10) | (c2 & 1023)); o += String.fromCharCode(240 | (cp >> 18), 128 | ((cp >> 12) & 63), 128 | ((cp >> 6) & 63), 128 | (cp & 63)); }
+    }
+    return o;
+  }
+  function sha256(str) {
+    var msg = utf8(String(str)), len = msg.length * 8, words = [], hash = H0.slice(), i;
+    msg += '\x80'; while (msg.length % 64 !== 56) msg += '\x00';
+    for (i = 0; i < msg.length; i++) words[i >> 2] = (words[i >> 2] || 0) | (msg.charCodeAt(i) << (((3 - i) % 4) * 8));
+    words[words.length] = (len / 4294967296) | 0; words[words.length] = len | 0;
+    var w = new Array(64);
+    for (var j = 0; j < words.length; j += 16) {
+      var old = hash.slice(0, 8);
+      for (i = 0; i < 16; i++) w[i] = words[j + i] | 0;
+      for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;
+      var a = hash[0], b = hash[1], cc = hash[2], d = hash[3], e = hash[4], f = hash[5], g = hash[6], h = hash[7];
+      for (i = 0; i < 64; i++) {
+        var S1 = rr(e, 6) ^ rr(e, 11) ^ rr(e, 25), ch = (e & f) ^ ((~e) & g);
+        var t1 = (h + S1 + ch + K[i] + w[i]) | 0;
+        var S0 = rr(a, 2) ^ rr(a, 13) ^ rr(a, 22), mj = (a & b) ^ (a & cc) ^ (b & cc);
+        var t2 = (S0 + mj) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = cc; cc = b; b = a; a = (t1 + t2) | 0;
+      }
+      hash[0] = (hash[0] + a) | 0; hash[1] = (hash[1] + b) | 0; hash[2] = (hash[2] + cc) | 0; hash[3] = (hash[3] + d) | 0;
+      hash[4] = (hash[4] + e) | 0; hash[5] = (hash[5] + f) | 0; hash[6] = (hash[6] + g) | 0; hash[7] = (hash[7] + h) | 0;
+    }
+    var out = '';
+    for (i = 0; i < 8; i++) for (var q = 3; q >= 0; q--) { var bb = (hash[i] >> (q * 8)) & 255; out += (bb < 16 ? '0' : '') + bb.toString(16); }
+    return out;
+  }
+
+  /* ---------- storage ---------- */
+  var S = null;
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function today() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function isoNow() { return new Date().toISOString(); }
+  function blank() { return { v: 1, launch_date: today(), lock_days: LOCK_DAYS, vault: VAULT, nextId: 1, members: [], pending: [], audit: [] }; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+  function load() { try { var r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+  function boot() {
+    S = load();
+    if (!S || !S.members) { S = blank(); save(); }
+    if (!S.pending) S.pending = [];
+    if (!S.members.some(function (m) { return m.is_admin; })) {
+      S.members.push({ id: S.nextId++, num: 0, name: 'Admin (owner)', email: '', tokens: 0, pass: '', wallets: [], primary: '', locked: false, approved: false, claimed: 0, is_admin: true, created: isoNow() });
+      log('Admin account created', 'system'); save();
+    }
+  }
+  function log(what, who) { S.audit = S.audit || []; S.audit.unshift({ t: isoNow(), what: what, who: who || '' }); if (S.audit.length > 400) S.audit.length = 400; }
+
+  function inr(n) {
+    n = String(Math.round(Number(n)));
+    if (n.length <= 3) return n;
+    var last3 = n.slice(-3), rest = n.slice(0, -3);
+    return rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + last3;
+  }
+  function dayNo() { var a = Date.parse(S.launch_date + 'T00:00:00'), b = Date.parse(today() + 'T00:00:00'); return Math.round((b - a) / 86400000); }
+  function daysLeft() { return Math.max(0, S.lock_days - dayNo()); }
+  function allocated() { return S.members.filter(function (m) { return !m.is_admin; }).reduce(function (s, m) { return s + m.tokens; }, 0); }
+  function remaining() { return S.vault - allocated(); }
+  function validAddr(a) { return /^0x[0-9a-fA-F]{40}$/.test(a || ''); }
+  function looksSecret(s) {
+    s = String(s || '');
+    if (/0x[0-9a-fA-F]{64,}/.test(s)) return true;   /* a real private key is 64 hex */
+    var w = s.trim().split(/\s+/);
+    if (w.length >= 12 && w.length <= 24 && w.every(function (x) { return /^[a-zA-Z]+$/.test(x); })) return true;
+    if (/(seed|mnemonic|private\s*key|passphrase|recovery)/i.test(s)) return true;
+    return false;
+  }
+  /* ---------- password recovery: security question (no email / no server needed) ---------- */
+  var SEC_QS = [
+    'What is your mother\u2019s name?',
+    'What was the name of your first school?',
+    'What city were you born in?',
+    'What is your favourite colour?',
+    'What is your pet\u2019s name?'
+  ];
+  function normAns(s) { return String(s == null ? '' : s).trim().toLowerCase().replace(/\s+/g, ' '); }
+  function hasSec(id) { var m = byId(id); return !!(m && m.sec && m.sec.q); }
+  function setSec(id, q, a) {
+    var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+    q = String(q || '').trim(); a = normAns(a);
+    if (q.length < 3) return { ok: false, msg: 'Choose a security question.' };
+    if (a.length < 2) return { ok: false, msg: 'The answer must be at least 2 characters.' };
+    if (looksSecret(a)) return { ok: false, msg: 'The answer looks like a key/seed phrase \u2014 rejected.' };
+    m.sec = { q: q, a: sha256(a) }; save();
+    log((m.is_admin ? 'Owner' : 'Member #' + m.num) + ' security question set', 'member'); save();
+    return { ok: true, msg: 'Security question saved.' };
+  }
+  function secQuestion(user) {
+    var m = find(user);
+    if (!m) return { ok: false, msg: 'No account found with that number or email. Check it and try again.' };
+    if (m.is_admin) return { ok: false, msg: 'The owner account (number 0) cannot be reset here.' };
+    if (!m.sec || !m.sec.q) return { ok: false, msg: 'This account has no security question \u2014 ask the owner: admin panel \u2192 tap your member \u2192 Set new password.' };
+    return { ok: true, id: m.id, num: m.num, name: m.name, q: m.sec.q };
+  }
+  function resetWithAnswer(user, ans, p1, p2) {
+    var m = find(user);
+    if (!m) return { ok: false, msg: 'No account found with that number or email.' };
+    if (m.is_admin) return { ok: false, msg: 'The owner account cannot be reset here.' };
+    if (!m.sec || !m.sec.q) return { ok: false, msg: 'This account has no security question \u2014 ask the owner for a new password.' };
+    if (m.sec.a !== sha256(normAns(ans))) return { ok: false, msg: 'Wrong answer. Please try again.' };
+    p1 = String(p1 || '').trim(); p2 = String(p2 || '').trim();
+    if (p1.length < 4) return { ok: false, msg: 'Password must be at least 4 characters.' };
+    if (p1 !== p2) return { ok: false, msg: 'The two passwords do not match.' };
+    if (looksSecret(p1)) return { ok: false, msg: 'That password looks like a key/seed phrase \u2014 rejected.' };
+    m.pass = sha256(p1); save();
+    log('Member #' + m.num + ' password reset with the security question', 'member'); save();
+    return { ok: true, msg: 'Password changed \u2014 log in with the new password now.' };
+  }
+  function changePass(id, oldP, p1, p2) {
+    var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+    if (!m.pass) return { ok: false, msg: 'This account has no password yet.' };
+    if (m.pass !== sha256(String(oldP || ''))) return { ok: false, msg: 'The current password is wrong.' };
+    p1 = String(p1 || '').trim(); p2 = String(p2 || '').trim();
+    if (p1.length < 4) return { ok: false, msg: 'Password must be at least 4 characters.' };
+    if (p1 !== p2) return { ok: false, msg: 'The two passwords do not match.' };
+    if (looksSecret(p1)) return { ok: false, msg: 'That password looks like a key/seed phrase \u2014 rejected.' };
+    m.pass = sha256(p1); save();
+    log((m.is_admin ? 'Owner' : 'Member #' + m.num) + ' changed their password', 'member'); save();
+    return { ok: true, msg: 'Password changed \u2014 use the new one next time.' };
+  }
+
+  function find(u) {
+    var __al = String(u||'').trim().toLowerCase();
+    if (__al==='owner'||__al==='admin'||__al==='owner (owner)'||__al==='admin (owner)'||__al==='0 owner') {
+      var __adm = S.members.filter(function(m){return m.is_admin;})[0];
+      if (__adm) return __adm;
+    }
+
+    u = String(u || '').trim().toLowerCase();
+    for (var i = 0; i < S.members.length; i++) {
+      var m = S.members[i];
+      if (String(m.num) === u) return m;
+      if (m.email && m.email.toLowerCase() === u) return m;
+    }
+    return null;
+  }
+  function byId(id) { for (var i = 0; i < S.members.length; i++) if (S.members[i].id === id) return S.members[i]; return null; }
+  function walletOwner(addr) {
+    var a = String(addr || '').toLowerCase(); if (!a) return null;
+    for (var i = 0; i < S.members.length; i++) {
+      var m = S.members[i];
+      if (String(m.primary || '').toLowerCase() === a) return m;
+      for (var j = 0; j < m.wallets.length; j++) if (String(m.wallets[j]).toLowerCase() === a) return m;
+    }
+    return null;
+  }
+  function vested(m) {
+    var d = dayNo(); if (d <= S.lock_days || !m.tokens) return 0;
+    var rel = Math.floor((d - S.lock_days - 1) / 2) + 1;   /* every second day from day 181 */
+    return Math.min(m.tokens, rel * m.tokens * 0.001);
+  }
+
+  function nextFreeNumber() {
+    var used = {}; S.members.forEach(function (m) { used[String(m.num)] = 1; });
+    var n = 1; while (used[String(n)]) n++; return n;
+  }
+  function register(o) {
+    var nm = String(o.name || '').trim(), em = String(o.email || '').trim();
+    if (nm.length < 2) return { ok: false, msg: 'Enter your full name.' };
+    if (looksSecret(nm)) return { ok: false, msg: 'The name looks like a key/seed phrase — rejected.' };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) return { ok: false, msg: 'Enter a valid email (for example ram@example.com).' };
+    var pw = String(o.pass || '');
+    if (pw.length < 8) return { ok: false, msg: 'Password must be at least 8 characters.' };
+    if (pw !== String(o.pass2 || '')) return { ok: false, msg: 'The two passwords do not match.' };
+    if (S.members.some(function (m) { return m.email && m.email.toLowerCase() === em.toLowerCase(); }))
+      
+  return { ok: false, msg: 'This email is already registered — log in with it, or ask the owner for the password.' };
+    if (S.pending.some(function (x) { return x.email.toLowerCase() === em.toLowerCase(); }))
+      return { ok: false, msg: 'An application from this email is already pending — wait for the owner approval.' };
+    var addr = String(o.addr || '').trim();
+    if (addr) {
+      if (looksSecret(addr)) return { ok: false, msg: 'This looks like a key/seed phrase entered by mistake — rejected.' };
+      if (!validAddr(addr)) return { ok: false, msg: 'The wallet address must be 0x + 40 characters.' };
+      var own = walletOwner(addr);
+      if (own) return { ok: false, msg: 'This wallet already belongs to member #' + own.num + ' — one wallet belongs to one member only.' };
+      if (S.pending.some(function (x) { return x.addr && x.addr.toLowerCase() === addr.toLowerCase(); }))
+        return { ok: false, msg: 'This wallet is already recorded in a pending application.' };
+    }
+    var qq = String(o.question == null ? '' : o.question).trim(), aa = normAns(o.answer), sec = null;
+    if (qq.length >= 3 && aa.length >= 2) {
+      if (looksSecret(aa)) return { ok: false, msg: 'The answer looks like a key/seed phrase \u2014 rejected.' };
+      sec = { q: qq, a: sha256(aa) };
+    }
+    var id = S.nextId++;
+    S.pending.push({ id: id, name: nm, email: em, addr: addr, pass: sha256(pw), sec: sec, at: isoNow() });
+    save(); log('New application: ' + nm + ' (' + em + ')', 'system'); save();
+    log('New application: ' + nm + ' (' + em + ')', 'public'); save();
+    return { ok: true, msg: 'Application sent. Your number and tokens are set after the owner approves.', id: id };
+  }
+  function pendingList() { return (S.pending || []).slice().reverse(); }
+  function approvePending(id) {
+    var i = -1, k;
+    for (k = 0; k < S.pending.length; k++) if (S.pending[k].id === id) { i = k; break; }
+    if (i < 0) return { ok: false, msg: 'Application not found.' };
+    var p = S.pending[i];
+    if (remaining() < DEFAULT_ALLOC) return { ok: false, msg: 'Left in vault ' + inr(remaining()) + ' — that many tokens are not left.' };
+    var num = nextFreeNumber();
+    var m = { id: S.nextId++, num: String(num), name: p.name, email: p.email, tokens: DEFAULT_ALLOC, pass: p.pass,
+      wallets: [], primary: '', locked: false, approved: false, claimed: 0, is_admin: false, created: isoNow(), sec: (p.sec || null) };
+    if (p.addr) { m.wallets.push(p.addr); m.primary = p.addr; }
+    S.members.push(m); S.pending.splice(i, 1);
+    var msg = 'Member #' + num + ' approved — ' + p.name + ' got ' + inr(DEFAULT_ALLOC) + ' tokens' + (p.addr ? ' (wallet linked)' : '');
+    log(msg, 'admin'); save();
+    return { ok: true, msg: msg, num: num };
+  }
+  function rejectPending(id) {
+    var i = -1;
+    for (var k = 0; k < S.pending.length; k++) if (S.pending[k].id === id) { i = k; break; }
+    if (i < 0) return { ok: false, msg: 'Application not found.' };
+    var p = S.pending.splice(i, 1)[0];
+    log('Application rejected: ' + p.name + ' (' + p.email + ')', 'admin'); save();
+    return { ok: true, msg: p.name + ' — application was rejected.' };
+  }
+
+/* first run: the owner sets their own password (no default password in code) */
+  function setAdminPassword(p1, p2) {
+    p1 = String(p1 || '').trim(); p2 = String(p2 || '').trim();
+    if (p1.length < 4) return { ok: false, msg: 'Password must be at least 4 characters.' };
+    if (p1 !== p2) return { ok: false, msg: 'The two passwords do not match.' };
+    var a = S.members.filter(function (m) { return m.is_admin; })[0];
+    if (!a) return { ok: false, msg: 'Admin account not found.' };
+    a.pass = sha256(String(p1).trim().toLowerCase()); a.pass_set = true; save();
+    log('Admin password created', 'system'); save();
+    return { ok: true, msg: 'Password has been set.' };
+  }
+  function adminNeedsSetup() {
+    var a = S.members.filter(function (m) { return m.is_admin; })[0];
+    return !!(a && !a.pass);
+  }
+
+  return {
+    boot: boot, save: save, S: function () { return S; }, log: log,
+    sha256: sha256, setAdminPassword: setAdminPassword, adminNeedsSetup: adminNeedsSetup, inr: inr, today: today, isoNow: isoNow,
+    SEC_QS: SEC_QS, setSec: setSec, secQuestion: secQuestion, resetWithAnswer: resetWithAnswer, hasSec: hasSec, changePass: changePass,
+    dayNo: dayNo, daysLeft: daysLeft, allocated: allocated, remaining: remaining,
+    find: find, byId: byId, walletOwner: walletOwner, validAddr: validAddr, looksSecret: looksSecret, vested: vested,
+    DEFAULT_ALLOC: DEFAULT_ALLOC, LOCK_DAYS: LOCK_DAYS, VAULT: VAULT,
+    register: register, pendingList: pendingList, approvePending: approvePending, rejectPending: rejectPending,
+
+    setLaunch: function (d) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(String(d))) return { ok: false, msg: 'Enter the date as YYYY-MM-DD.' };
+      S.launch_date = d; log('Launch date changed: ' + d, 'admin'); save();
+      return { ok: true, msg: 'Launch date: ' + d + ' → now day ' + dayNo() + '.' };
+    },
+
+    addMember: function (o) {
+      var num = String(o.num == null ? '' : o.num).trim();
+      if (!/^\d+$/.test(num)) return { ok: false, msg: 'The member number must be digits only.' };
+      if (num === '0') return { ok: false, msg: 'Number 0 is reserved for the admin.' };
+      if (S.members.some(function (m) { return String(m.num) === num; })) return { ok: false, msg: 'Member #' + num + ' already exists.' };
+      var em = String(o.email || '').trim();
+      if (em && S.members.some(function (m) { return m.email && m.email.toLowerCase() === em.toLowerCase(); })) return { ok: false, msg: 'This email is already registered.' };
+      var toks = Number(o.tokens);
+      if (!isFinite(toks) || toks <= 0 || Math.floor(toks) !== toks) return { ok: false, msg: 'Enter the token amount as a proper positive number.' };
+      if (toks > remaining()) return { ok: false, msg: 'Left in vault: ' + inr(remaining()) + ' — that many tokens cannot be distributed.' };
+      if (looksSecret(o.name)) return { ok: false, msg: 'The name looks like a key or seed phrase — rejected.' };
+      var pw = String(o.pass || '');
+      if (pw.length < 8) return { ok: false, msg: 'Password must be at least 8 characters.' };
+      var addr = String(o.addr || '').trim(), note = ' (wallet added later)';
+      if (addr) {
+        if (!validAddr(addr) && looksSecret(addr)) return { ok: false, msg: 'This looks like a key/seed phrase entered by mistake — rejected.' };
+        if (!validAddr(addr)) return { ok: false, msg: 'The wallet address must be 0x + 40 characters.' };
+        var own = walletOwner(addr);
+        if (own) return { ok: false, msg: 'This wallet already belongs to member #' + own.num + ' — one wallet belongs to one member only.' };
+        note = ' (wallet linked)';
+      }
+      var m = { id: S.nextId++, num: num, name: String(o.name || '').trim() || ('Member #' + num), email: em, tokens: toks, pass: sha256(pw), wallets: [], primary: '', locked: false, approved: false, claimed: 0, is_admin: false, created: isoNow() };
+      if (addr) { m.wallets.push(addr); m.primary = addr; }
+      S.members.push(m);
+      var msg = 'Member #' + num + ' added — ' + inr(toks) + ' tokens' + note;
+      log(msg, 'admin'); save();
+      return { ok: true, msg: msg };
+    },
+
+    bulkAdd: function (text) {
+      var lines = String(text || '').split(/\r?\n/), done = 0, bad = [];
+      for (var i = 0; i < lines.length; i++) {
+        var L = lines[i].trim(); if (!L) continue;
+        if (/^(number|number|num)\b/i.test(L)) continue;
+        var p = L.split(',');
+        var r = this.addMember({ num: (p[0] || '').trim(), tokens: (p[1] || '').trim() || DEFAULT_ALLOC, name: (p[2] || '').trim(), email: (p[3] || '').trim(), pass: (p[4] || '').trim() || 'member@1234', addr: (p[5] || '').trim() });
+        if (r.ok) done++; else bad.push('Line ' + (i + 1) + ': ' + r.msg);
+      }
+      save();
+      return { ok: bad.length === 0, msg: done + ' members added' + (bad.length ? ' | ' + bad.length + ' rejected → ' + bad.slice(0, 3).join('; ') : ''), done: done, bad: bad };
+    },
+
+    setPass: function (id, pw) {
+      var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+      if (m.is_admin) return { ok: false, msg: 'The admin password cannot be changed here.' };
+      if (String(pw).length < 8) return { ok: false, msg: 'Password must be at least 8 characters.' };
+      m.pass = sha256(pw); log('Member #' + m.num + ' password changed', 'admin'); save();
+      return { ok: true, msg: 'Member #' + m.num + ' — new password was set.' };
+    },
+
+    addWallet: function (id, addr) {
+      var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+      if (m.is_admin) return { ok: false, msg: 'Wallet rules do not apply to the admin.' };
+      if (m.locked) return { ok: false, msg: '🔒 Rejected — the wallet is locked permanently. The address can never change now.' };
+      if (dayNo() >= S.lock_days) return { ok: false, msg: 'days ' + dayNo() + ' done — run merge/lock first, after that the address cannot change.' };
+      addr = String(addr || '').trim();
+      if (!validAddr(addr) && looksSecret(addr)) return { ok: false, msg: 'This looks like a key/seed phrase entered by mistake — rejected.' };
+      if (!validAddr(addr)) return { ok: false, msg: 'The wallet address must be 0x + 40 characters.' };
+      var own = walletOwner(addr);
+      if (own && own.id === m.id) return { ok: false, msg: 'This address is already on record for this member.' };
+      if (own) return { ok: false, msg: 'This wallet already belongs to member #' + own.num + ' — one wallet belongs to one member only.' };
+      m.wallets.push(addr); if (!m.primary) m.primary = addr;
+      log('Member #' + m.num + ' address recorded: ' + addr, 'admin'); save();
+      return { ok: true, msg: 'Address recorded: ' + addr.slice(0, 12) + '… — ' + (S.lock_days - dayNo()) + ' days during which it can still be changed.' };
+    },
+
+    mergeLock: function (id) {
+      var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+      if (m.locked) return { ok: false, msg: 'Member #' + m.num + ' is already locked.' };
+      if (dayNo() < S.lock_days) return { ok: false, msg: 'It is day ' + dayNo() + ' — ' + S.lock_days + ' days are not complete. Merge/lock happens after ' + S.lock_days + ' days.' };
+      if (!m.wallets.length) return { ok: false, msg: 'Member #' + m.num + ' has no address on record — at least one address is needed to lock.' };
+      var n = m.wallets.length; m.primary = m.wallets[0]; m.locked = true;
+      var msg = 'Day ' + dayNo() + ': ' + n + ' addresses merged → ' + m.primary.slice(0, 12) + '… — locked permanently.';
+      log('Member #' + m.num + ': ' + msg, 'admin'); save();
+      return { ok: true, msg: msg };
+    },
+
+    mergeAll: function () {
+      var done = 0, bad = 0;
+      for (var i = 0; i < S.members.length; i++) {
+        var m = S.members[i]; if (m.is_admin || m.locked) continue;
+        var r = this.mergeLock(m.id); if (r.ok) done++; else bad++;
+      }
+      save();
+      return { ok: done > 0, msg: done + ' members locked' + (bad ? ' | ' + bad + ' rejected (no address or days not complete)' : '') };
+    },
+
+    approve: function (id) {
+      var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+      if (dayNo() < S.lock_days) return { ok: false, msg: 'It is day ' + dayNo() + ' — permission can be given only after ' + S.lock_days + ' days.' };
+      if (!m.locked) return { ok: false, msg: 'first Wallet merge/Lock do.' };
+      if (m.approved) return { ok: false, msg: 'Member #' + m.num + ' already has permission (one-way).' };
+      m.approved = true; log('Member #' + m.num + ' was given withdrawal permission (one-way)', 'admin'); save();
+      return { ok: true, msg: 'Member #' + m.num + ' got withdrawal permission — one-way, it cannot be undone.' };
+    },
+
+    claim: function (id) {
+      var m = byId(id); if (!m) return { ok: false, msg: 'Member not found.' };
+      if (dayNo() < S.lock_days) return { ok: false, msg: '🔒 ' + S.lock_days + ' days not complete — withdrawal is closed.' };
+      if (!m.locked) return { ok: false, msg: '⏳ Wallet merge/lock is still pending.' };
+      if (!m.approved) return { ok: false, msg: '⏳ Owner permission is pending.' };
+      var v = vested(m), left = v - (m.claimed || 0);
+      if (left < 0.000001) return { ok: false, msg: 'Nothing new was released today — check again tomorrow or the day after.' };
+      m.claimed = v; log('Member #' + m.num + ' withdrew ' + left.toFixed(2) + ' tokens', 'member'); save();
+      return { ok: true, msg: '✅ ' + left.toFixed(2) + ' tokens withdrawn (total released: ' + v.toFixed(2) + ').' };
+    },
+
+    exportJSON: function () { return JSON.stringify(S, null, 1); },
+    importJSON: function (t) {
+      try {
+        var d = JSON.parse(t);
+        if (!d || !d.members) return { ok: false, msg: 'This backup file is not valid.' };
+        S = d; if (!S.nextId) S.nextId = 1000; save();
+        return { ok: true, msg: 'Backup loaded — ' + S.members.length + ' accounts.' };
+      } catch (e) { return { ok: false, msg: 'The file could not be read.' }; }
+    },
+    resetAll: function () { S = blank(); boot(); log('All data cleared', 'admin'); save(); return { ok: true, msg: 'All data cleared — a fresh start.' }; }
+  };
+})();
+</script>
+<script>
+/* ============================================================
+   BITFIRST — screen (UI). All the maths lives inside app_core (BF).
+   ============================================================ */
+var $ = function (s, e) { return (e || document).querySelector(s); };
+var $$ = function (s, e) { return Array.prototype.slice.call((e || document).querySelectorAll(s)); };
+var esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); };
+var toastEl = $('#toast'), toastT = null;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 3400); }
+function closeModal() { $('#modal').classList.add('hide'); $('#sheet').innerHTML = ''; }
+function openModal(html) { $('#sheet').innerHTML = html; $('#modal').classList.remove('hide'); $('#sheet').scrollTop = 0; }
+$('#modal').addEventListener('click', function (e) { if (e.target.id === 'modal') closeModal(); });
+
+var sess = { id: null };
+var V = { login: $('#v-login'), register: $('#v-register'), forgot: $('#v-forgot'), member: $('#v-member'), admin: $('#v-admin') };
+function show(which) { for (var k in V) V[k].classList.toggle('hide', k !== which); }
+
+BF.boot();
+render();
+/* ===== Grand Welcome (added) ===== */
+(function(){
+  try{
+    var logged=false; try{ logged = !!(sess && sess.id); }catch(e0){}
+    if(!logged && !document.getElementById('bf-welcome')){
+      var w=document.createElement('div');
+      w.id='bf-welcome';
+      w.style.cssText='position:fixed;inset:0;z-index:200;background:radial-gradient(900px 520px at 50% -8%,#2b2106 0%,#0b0b0b 62%);overflow:auto;padding:22px 18px 34px;color:#f5e9c8';
+      w.innerHTML='<div style="max-width:540px;margin:0 auto;text-align:center">'
+       +'<div style="width:76px;height:76px;line-height:76px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(160deg,#f7d774,#b8860b);color:#0b0b0b;font-size:36px;font-weight:700">\u00a5</div>'
+       +'<div style="font-size:12.5px;letter-spacing:3px;color:#c9a227;text-transform:uppercase">Grand Welcome</div>'
+       +'<h1 style="font-size:36px;margin:6px 0 4px;color:#f7d774">BITFIRST</h1>'
+       +'<div style="color:#cdb98a;font-size:14px">Community-first token on BNB Chain (BEP-20)</div>'
+       +'<p style="color:#e8dcc0;font-size:14px;line-height:1.7;margin:16px 0 0;text-align:left">BITFIRST (\u00a5) is a <b>fixed-supply</b> token \u2014 <b>369,000,000</b> in total, 18 decimals. No owner mint, no pause, no blacklist, no tax. This member app works <b>offline</b>: no internet needed, no email, no fee. Your data stays only on your phone.</p>'
+       +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 0;text-align:left">'
+       +'<div style="border:1px solid #3a2f12;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#a89468;letter-spacing:1px">TOTAL SUPPLY</div><div style="font-size:16px;color:#f7d774">369,000,000 \u00a5</div></div>'
+       +'<div style="border:1px solid #3a2f12;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#a89468;letter-spacing:1px">CHAIN</div><div style="font-size:16px;color:#f7d774">BNB \u00b7 BEP-20</div></div>'
+       +'<div style="border:1px solid #3a2f12;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#a89468;letter-spacing:1px">COMMUNITY SHARE</div><div style="font-size:16px;color:#f7d774">50%</div></div>'
+       +'<div style="border:1px solid #3a2f12;border-radius:12px;padding:10px 12px"><div style="font-size:11px;color:#a89468;letter-spacing:1px">PER MEMBER</div><div style="font-size:16px;color:#f7d774">3,690 \u00a5</div></div>'
+       +'</div>'
+       +'<p style="color:#cdb98a;font-size:13px;line-height:1.6;margin:14px 0 0;text-align:left"><b>Planned distribution:</b> Community 50% \u00b7 Liquidity 10% \u00b7 Team 10% \u00b7 Charity 10% \u00b7 Development 10% \u00b7 School 10%.</p>'
+       +'<p style="color:#cdb98a;font-size:13px;line-height:1.6;margin:10px 0 0;text-align:left"><b>How it works:</b> 1) the owner approves a member \u2192 2) the member gets <b>3,690 \u00a5</b> \u2192 3) tokens stay locked for <b>180 days</b>, then release as per the lock plan.</p>'
+       +'<button id="bf-enter" style="width:100%;margin:22px 0 0;padding:15px;border:0;border-radius:12px;background:linear-gradient(160deg,#f7d774,#b8860b);color:#0b0b0b;font-size:16px;font-weight:700">Enter the app \u2192</button>'
+       +'<div style="font-size:11.5px;color:#8a7f66;margin-top:14px;line-height:1.6">Hold responsibly. This app is not an offer of securities and promises no profit. Owner login: type <b>Owner</b> as the username.</div>'
+       +'</div>';
+      document.body.appendChild(w);
+      var eb=document.getElementById('bf-enter');
+      if(eb) eb.addEventListener('click',function(){ try{localStorage.setItem('bf_seen_welcome','1');}catch(z){} var e=document.getElementById('bf-welcome'); if(e&&e.parentNode) e.parentNode.removeChild(e); });
+    }
+    try{
+      var ru=localStorage.getItem('bf_remember_user');
+      var iu=document.getElementById('login-user'), rb=document.getElementById('login-remember');
+      if(ru && iu){ iu.value=ru; if(rb) rb.checked=true; }
+    }catch(e3){}
+  }catch(e){}
+})();
+
+
+function render() {
+  var m = sess.id ? BF.byId(sess.id) : null;
+  $('#btn-out').classList.toggle('hide', !m);
+  if (!m) { show('login'); return; }
+  if (m.is_admin) { show('admin'); renderAdmin(); }
+  else { show('member'); renderMember(m); }
+}
+
+/* ---------------------- Log in ---------------------- */
+function doLogin() {
+  var u = $('#login-user').value.trim(), p = $('#login-pass').value.trim();
+  if (!u) { toast('Member number or email enter.'); return; }
+  if (BF.looksSecret(u) || BF.looksSecret(p)) { toast('Key/seed-like input — rejected. Never enter it.'); return; }
+  var m = BF.find(u);
+  if (!m) { toast('Member not found. New members: register with "Create new member" below — after the owner approves you get your number and 3,690 tokens.'); return; }
+  if (m.pass !== BF.sha256(p) && !(m.is_admin && (m.pass === BF.sha256(p.toLowerCase()) || m.pass === BF.sha256(p.trim().toLowerCase())))) { toast('Wrong password. If you forgot it, ask the owner for a new password.'); return; }
+  sess.id = m.id; $('#login-pass').value = '';
+  try { var __rb=document.getElementById('login-remember'); if (__rb && __rb.checked) { localStorage.setItem('bf_remember_user', u); } else { localStorage.removeItem('bf_remember_user'); } } catch(e){}
+  BF.log('Log in: ' + (m.is_admin ? 'admin' : 'Member #' + m.num), 'member');
+  render(); toast('Welcome, ' + (m.name || ('#' + m.num)));
+}
+$('#login-btn').addEventListener('click', doLogin);
+$('#login-pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+$('#go-register').addEventListener('click', function () { show('register'); });
+
+/* ---------------------- Forgot password ---------------------- */
+var fUser = null;
+function fClear() {
+  fUser = null;
+  ['#f-user', '#f-ans', '#f-p1', '#f-p2'].forEach(function (s) { $(s).value = ''; });
+  $('#f-step2').classList.add('hide'); $('#f-q').textContent = '';
+}
+$('#go-forgot').addEventListener('click', function () { fClear(); show('forgot'); });
+$('#f-back').addEventListener('click', function () { fClear(); show('login'); });
+$('#f-find').addEventListener('click', function () {
+  var u = $('#f-user').value.trim();
+  if (!u) { toast('Enter your member number or email.'); return; }
+  var r = BF.secQuestion(u);
+  if (!r.ok) { toast(r.msg); $('#f-step2').classList.add('hide'); return; }
+  fUser = u; $('#f-q').textContent = r.q; $('#f-step2').classList.remove('hide');
+  toast('Account found \u2014 answer your security question.');
+});
+$('#f-go').addEventListener('click', function () {
+  if (!fUser) { toast('First tap "Find my account".'); return; }
+  var u = fUser;
+  var r = BF.resetWithAnswer(u, $('#f-ans').value, $('#f-p1').value, $('#f-p2').value);
+  toast(r.msg);
+  if (r.ok) { fClear(); show('login'); $('#login-user').value = u; }
+});
+$('#r-back').addEventListener('click', function () { show('login'); });
+$('#r-send').addEventListener('click', function () {
+  var q = $('#r-q').value === '__own__' ? $('#r-qown').value : $('#r-q').value;
+  var r = BF.register({ name: $('#r-name').value, email: $('#r-mail').value, addr: $('#r-addr').value,
+    pass: $('#r-pass').value, pass2: $('#r-pass2').value,
+    question: q, answer: $('#r-a').value });
+  toast(r.msg);
+  if (r.ok) { ['#r-name', '#r-mail', '#r-addr', '#r-pass', '#r-pass2', '#r-qown', '#r-a'].forEach(function (s) { $(s).value = ''; }); show('login'); }
+});
+$('#btn-out').addEventListener('click', function () { sess.id = null; render(); $$('input').forEach(function (i) { if (i.type === 'password' || i.type === 'text') i.value = ''; }); });
+
+/* ---------------------- Member screen ---------------------- */
+function renderMember(m) {
+  var d = BF.dayNo(), left = BF.daysLeft(), v = BF.vested(m), claimed = m.claimed || 0, ready = v - claimed;
+  var wpill = m.locked ? '<span class="pill ok">🔒 Wallet locked permanently</span>'
+    : (m.wallets.length ? '<span class="pill warn">Open — can be changed for ' + left + ' days</span>'
+      : '<span class="pill bad">Wallet not linked yet</span>');
+  var apill = m.approved ? '<span class="pill ok">✅ Owner permission granted</span>' : '<span class="pill warn">Permission pending</span>';
+  var lpill = d <= BF.LOCK_DAYS ? '<span class="pill warn">' + BF.LOCK_DAYS + '-day lock — ' + left + ' days left</span>'
+    : '<span class="pill ok">Lock complete — day ' + d + '</span>';
+  $('#m-hero').innerHTML =
+    '<div class="lbl">Member number</div><div class="big">#' + esc(m.num) + '</div>' +
+    '<div class="nm"><b>' + esc(m.name) + '</b></div>' +
+    '<div class="lbl" style="margin-top:10px">Your share</div>' +
+    '<div class="big">' + BF.inr(m.tokens) + ' <span style="font-size:15px">BITFIRST (¥) tokens</span></div>' +
+    wpill + ' ' + lpill + ' ' + apill;
+
+  var pct = m.tokens ? Math.min(100, (v / m.tokens) * 100) : 0;
+  $('#m-claim').innerHTML =
+    '<div class="lbl">Released so far</div><div style="font-size:20px;color:var(--gold2);font-weight:700">' + v.toFixed(2) + ' / ' + BF.inr(m.tokens) + '</div>' +
+    '<div class="bar"><i style="width:' + pct.toFixed(2) + '%"></i></div>' +
+    '<p class="hint">Ready to withdraw: <b>' + (ready > 0 ? ready.toFixed(2) : '0.00') + '</b> tokens · withdrawn so far: ' + claimed.toFixed(2) + '</p>' +
+    '<button class="gold" id="m-claimbtn">Withdraw tokens</button>';
+  $('#m-claimbtn').addEventListener('click', function () { toast(BF.claim(m.id).msg); render(); });
+
+  $('#m-info').innerHTML =
+    '<tr><th>Wallet address</th><td class="mono">' + (m.primary ? esc(m.primary) : 'Not linked yet') + '</td></tr>' +
+    '<tr><th>Recorded addresses</th><td>' + m.wallets.length + '</td></tr>' +
+    '<tr><th>Current day</th><td>days ' + d + ' (launch: ' + esc(BF.S().launch_date) + ')</td></tr>' +
+    '<tr><th>180 days complete</th><td>' + (left ? (left + ' days left') : 'complete') + '</td></tr>' +
+    '<tr><th>Tokens left</th><td>' + (m.tokens - v).toFixed(2) + '</td></tr>';
+
+  $('#m-vault').innerHTML =
+    '<tr><th>Community vault</th><td><b>' + BF.inr(BF.VAULT) + '</b></td></tr>' +
+    '<tr><th>Total distributed</th><td>' + BF.inr(BF.allocated()) + '</td></tr>' +
+    '<tr><th>Left in vault</th><td>' + BF.inr(BF.remaining()) + '</td></tr>';
+
+  var secOk = BF.hasSec(m.id);
+  $('#m-sec').innerHTML = secOk
+    ? '<p class="pill ok" style="margin:0">\u2705 Security question set \u2014 you can reset your own password</p>' +
+      '<p class="hint">Question: <b>' + esc(m.sec.q) + '</b></p>' +
+      '<button class="gh" id="m-secbtn">Change security question</button>'
+    : '<p class="hint" style="margin-top:0">Add a security question now \u2014 if you forget your password you can reset it yourself without waiting for the owner.</p>' +
+      '<button class="gold" id="m-secbtn">Set security question</button>';
+  $('#m-secbtn').addEventListener('click', function () { openSecModal(m.id, false); });
+  $('#m-passbtn').addEventListener('click', function () {
+    var r = BF.changePass(m.id, $('#m-old').value, $('#m-p1').value, $('#m-p2').value);
+    toast(r.msg);
+    if (r.ok) { ['#m-old', '#m-p1', '#m-p2'].forEach(function (s) { $(s).value = ''; }); }
+  });
+}
+function openSecModal(id, isAdmin) {
+  var m = BF.byId(id); if (!m) return;
+  var opts = BF.SEC_QS.map(function (q) { return '<option value="' + esc(q) + '">' + esc(q) + '</option>'; }).join('');
+  openModal('<h2>Security question</h2>' +
+    '<p class="hint">If the password is forgotten, this question is the way to reset it yourself.' + (m.sec ? ' Current: <b>' + esc(m.sec.q) + '</b>' : '') + '</p>' +
+    '<label>Question</label><select id="sq-q">' + opts + '<option value="__own__">My own question\u2026</option></select>' +
+    '<input id="sq-own" placeholder="Type your own question">' +
+    '<label>Answer</label><input id="sq-a" placeholder="Your answer">' +
+    '<button class="gold" id="sq-save">Save</button>' +
+    '<button id="sq-close">Close</button>');
+  $('#sq-close').addEventListener('click', closeModal);
+  $('#sq-save').addEventListener('click', function () {
+    var q = $('#sq-q').value === '__own__' ? $('#sq-own').value : $('#sq-q').value;
+    var r = BF.setSec(id, q, $('#sq-a').value);
+    toast(r.msg);
+    if (r.ok) { if (isAdmin) { openMemberFresh(id); } else { closeModal(); render(); } }
+  });
+}
+
+/* ---------------------- admin screen ---------------------- */
+function renderAdmin() {
+  var d = BF.dayNo(), left = BF.daysLeft();
+  var mem = BF.S().members.filter(function (m) { return !m.is_admin; });
+  var withW = mem.filter(function (m) { return m.wallets.length; }).length;
+  var locked = mem.filter(function (m) { return m.locked; }).length;
+  $('#a-stats').innerHTML =
+    st('Total members', BF.inr(mem.length)) + st('Space left', BF.inr(BF.remaining())) +
+    st('Tokens distributed', BF.inr(BF.allocated())) + st('wallets linked', withW + ' / ' + mem.length) +
+    st('already locked', BF.inr(locked)) + st('Current day', String(d));
+  $('#a-launch').value = BF.S().launch_date;
+  $('#a-dayinfo').innerHTML = 'today <b>day ' + d + '</b> · <b>' + left + ' days</b> to complete 180 days' +
+    (left ? '' : ' · <span style="color:var(--ok)">Lock complete — merge/permission is now open</span>');
+
+  var pend = BF.pendingList();
+  $('#a-pendcount').textContent = pend.length ? '(' + pend.length + ')' : '';
+  var PB = $('#a-pend');
+  PB.innerHTML = pend.length ? pend.map(function (x) {
+    return '<div class="item" data-pid="' + x.id + '">' +
+      '<div class="n">+</div>' +
+      '<div class="g"><div class="t1">' + esc(x.name) + '</div>' +
+      '<div class="t2 mono">' + esc(x.email) + (x.addr ? ' · ' + esc(x.addr) : ' · wallet added later') + '</div></div>' +
+      '<div class="rt"><span class="pill warn" style="margin:0;font-size:11px">Approval pending</span></div></div>';
+  }).join('') : '<p class="hint">No new applications right now.</p>';
+  $$('#a-pend .item').forEach(function (el) {
+    el.addEventListener('click', function () { openPending(parseInt(el.getAttribute('data-pid'), 10)); });
+  });
+
+  var L = $('#a-list');
+  if (!mem.length) {
+    L.innerHTML = '<div class="item"><div class="g"><div class="t1">No members right now</div><div class="t2">You can fill a sample with the button below</div></div></div>' +
+      '<div style="padding:12px"><button class="gh" id="a-demo">Fill 3 sample (test) members</button></div>';
+    $('#a-demo').addEventListener('click', function () {
+      var r = BF.bulkAdd('1, 3690, Ram Kumar, ram@example.com, member1234\n2, 3690, Sita Devi, sita@example.com, member1234\n3, 5000, Amit Sharma, amit@example.com, member1234');
+      toast(r.msg); renderAdmin();
+    });
+    return;
+  }
+  L.innerHTML = mem.map(function (m) {
+    var pill = m.locked ? '<span class="pill ok" style="margin:0;font-size:11px">🔒 Lock</span>'
+      : (m.wallets.length ? '<span class="pill warn" style="margin:0;font-size:11px">Open</span>'
+        : '<span class="pill bad" style="margin:0;font-size:11px">no address</span>');
+    return '<div class="item" data-id="' + m.id + '">' +
+      '<div class="n">' + esc(m.num) + '</div>' +
+      '<div class="g"><div class="t1">' + esc(m.name) + '</div>' +
+      '<div class="t2 mono">' + (m.primary ? esc(m.primary) : '— wallet later —') + '</div></div>' +
+      '<div class="rt"><div class="tk">' + BF.inr(m.tokens) + '</div><div class="wb">' + m.wallets.length + ' addresses</div>' + pill + '</div>' +
+      '</div>';
+  }).join('');
+  $$('#a-list .item', L).forEach(function (el) {
+    el.addEventListener('click', function () { openMember(parseInt(el.getAttribute('data-id'), 10)); });
+  });
+}
+function st(k, v) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
+
+function openPending(id) {
+  var list = BF.pendingList(), x = null;
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) x = list[i];
+  if (!x) return;
+  openModal('<h2>Application — ' + esc(x.name) + '</h2>' +
+    '<table><tr><th>Email</th><td class="mono">' + esc(x.email) + '</td></tr>' +
+    '<tr><th>Wallet</th><td class="mono">' + (x.addr ? esc(x.addr) : 'not provided') + '</td></tr>' +
+    '<tr><th>Application time</th><td>' + esc(x.at.slice(0, 16).replace('T', ' ')) + '</td></tr></table>' +
+    '<p class="hint">On approval: the next free member number + ' + BF.inr(BF.DEFAULT_ALLOC) + ' tokens + their own password get linked.</p>' +
+    '<button class="gold" id="p-ok">✅ Approve</button>' +
+    '<button class="dn" id="p-no">Reject</button>' +
+    '<button id="p-close">Close</button>');
+  $('#p-close').addEventListener('click', closeModal);
+  $('#p-ok').addEventListener('click', function () { toast(BF.approvePending(id).msg); closeModal(); renderAdmin(); });
+  $('#p-no').addEventListener('click', function () { toast(BF.rejectPending(id).msg); closeModal(); renderAdmin(); });
+}
+function openMember(id) {
+  var m = BF.byId(id); if (!m) return;
+  var d = BF.dayNo(), v = BF.vested(m);
+  var html =
+    '<h2>Member #' + esc(m.num) + ' — ' + esc(m.name) + '</h2>' +
+    '<p class="hint">share: <b>' + BF.inr(m.tokens) + '</b> tokens · released: ' + v.toFixed(2) +
+    ' · withdrawn: ' + (m.claimed || 0).toFixed(2) + ' · current days ' + d + '</p>' +
+    '<h3>Recorded addresses (' + m.wallets.length + ')</h3>' +
+    (m.wallets.length ? m.wallets.map(function (w, i) {
+      return '<div class="audit mono">' + (i === 0 ? '★ ' : '· ') + esc(w) + '</div>';
+    }).join('') : '<p class="hint">No address. Earlier only the number + share was entered.</p>') +
+    '<label>Add a new wallet address</label>' +
+    '<input id="s-addr" class="mono" placeholder="0x...">' +
+    '<button class="gold" id="s-addw">Add address</button>' +
+    '<h3>After 180 days</h3>' +
+    '<div class="row">' +
+    '<button class="gh" id="s-merge">' + (m.locked ? 'Locked' : 'Merge addresses and lock permanently') + '</button>' +
+    '<button class="gh" id="s-appr">' + (m.approved ? 'Permission granted (one-way)' : 'Grant withdrawal permission (one-way)') + '</button>' +
+    '</div>' +
+    '<h3>Security question (self-service reset)</h3>' +
+    '<p class="hint">' + (m.sec ? 'Set: <b>' + esc(m.sec.q) + '</b>' : 'Not set \u2014 this member cannot reset their own password.') + '</p>' +
+    '<input id="s-q" placeholder="Security question">' +
+    '<input id="s-a" placeholder="Answer">' +
+    '<button class="gh" id="s-setsec">Save security question</button>' +
+    '<h3>Password reset by owner (no email needed)</h3>' +
+    '<label>New password (4 or more characters)</label>' +
+    '<div class="pw"><input id="s-pass" type="password"><button type="button" class="eye" data-eye="s-pass" title="Show / hide">👁</button></div>' +
+    '<button class="gh" id="s-setpass">Set new password</button>' +
+    '<div class="warn">Permission is one-way. After locking, the address never changes — tell the member beforehand.</div>' +
+    '<button id="s-close">Close</button>';
+  openModal(html);
+  $('#s-close').addEventListener('click', closeModal);
+  $('#s-addw').addEventListener('click', function () { toast(BF.addWallet(m.id, $('#s-addr').value).msg); openMemberFresh(id); });
+  $('#s-merge').addEventListener('click', function () { toast(BF.mergeLock(m.id).msg); openMemberFresh(id); });
+  $('#s-appr').addEventListener('click', function () { toast(BF.approve(m.id).msg); openMemberFresh(id); });
+  $('#s-setpass').addEventListener('click', function () { toast(BF.setPass(m.id, $('#s-pass').value).msg); });
+  $('#s-setsec').addEventListener('click', function () { var r = BF.setSec(m.id, $('#s-q').value, $('#s-a').value); toast(r.msg); if (r.ok) openMemberFresh(id); });
+}
+function openMemberFresh(id) { openMember(id); renderAdmin(); }
+
+/* ---------------------- admin buttons ---------------------- */
+$('#a-today').addEventListener('click', function () { toast(BF.setLaunch(BF.today()).msg); renderAdmin(); });
+$('#a-setdate').addEventListener('click', function () { toast(BF.setLaunch($('#a-launch').value).msg); renderAdmin(); });
+$('#a-add').addEventListener('click', function () {
+  var r = BF.addMember({ num: $('#a-num').value, tokens: $('#a-tok').value, name: $('#a-name').value, email: $('#a-mail').value, addr: $('#a-addr').value, pass: $('#a-pass').value });
+  toast(r.msg);
+  if (r.ok) { ['#a-num', '#a-name', '#a-mail', '#a-addr', '#a-pass'].forEach(function (s) { $(s).value = ''; }); }
+  renderAdmin();
+});
+$('#a-bulkbtn').addEventListener('click', function () { toast(BF.bulkAdd($('#a-bulk').value).msg); $('#a-bulk').value = ''; renderAdmin(); });
+$('#a-csv').addEventListener('click', function () { $('#a-csvfile').click(); });
+$('#a-csvfile').addEventListener('change', function (e) {
+  var f = e.target.files[0]; if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function () { toast(BF.bulkAdd(rd.result).msg); renderAdmin(); };
+  rd.readAsText(f);
+});
+$('#a-mergeall').addEventListener('click', function () { toast(BF.mergeAll().msg); renderAdmin(); });
+$('#a-passbtn').addEventListener('click', function () {
+  var a = BF.S().members.filter(function (m) { return m.is_admin; })[0];
+  if (!a) return;
+  var r = BF.changePass(a.id, $('#a-old').value, $('#a-p1').value, $('#a-p2').value);
+  toast(r.msg);
+  if (r.ok) { ['#a-old', '#a-p1', '#a-p2'].forEach(function (s) { $(s).value = ''; }); }
+});
+$('#a-exp').addEventListener('click', function () {
+  var t = BF.exportJSON();
+  openModal('<h2>Backup</h2><p class="hint">All the data is below. Press <b>Copy</b> and keep it safe in a notes app or email.</p>' +
+    '<textarea id="b-txt" style="min-height:240px" readonly>' + esc(t) + '</textarea>' +
+    '<button class="gold" id="b-copy">Copy</button>' +
+    '<button id="b-close">Close</button>');
+  $('#b-close').addEventListener('click', closeModal);
+  $('#b-copy').addEventListener('click', function () {
+    var ta = $('#b-txt');
+    try { ta.select(); ta.setSelectionRange(0, 999999); if (document.execCommand('copy')) { toast('Copied — keep it somewhere safe.'); return; } } catch (e) { }
+    if (navigator.clipboard) { navigator.clipboard.writeText(ta.value).then(function () { toast('Copied.'); }, function () { toast('Copy failed — select the text by hand and copy it.'); }); }
+    else { toast('Select by hand and copy.'); }
+  });
+});
+$('#a-imp').addEventListener('click', function () { $('#a-impfile').click(); });
+$('#a-impfile').addEventListener('change', function (e) {
+  var f = e.target.files[0]; if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function () { toast(BF.importJSON(rd.result).msg); sess.id = null; render(); };
+  rd.readAsText(f);
+});
+$('#a-reset').addEventListener('click', function () {
+  if (confirm('All data (members, passwords, wallets) will be erased. Sure?')) { toast(BF.resetAll().msg); sess.id = null; render(); }
+});
+
+/* ---------------------- audit ---------------------- */
+(function () {
+  var box = $('#a-audit');
+  var obs = setInterval(function () {
+    if (!V.admin.classList.contains('hide')) {
+      var a = (BF.S().audit || []).slice(0, 25);
+      box.innerHTML = a.length ? a.map(function (r) {
+        return '<div class="audit">' + esc(r.t.slice(0, 16).replace('T', ' ')) + ' · ' + esc(r.what) + '</div>';
+      }).join('') : '<p class="hint">No activity right now.</p>';
+    }
+  }, 1200);
+})();
+
+/* ---------------------- PWA install ---------------------- */
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; $('#btn-install').classList.remove('hide'); });
+$('#btn-install').addEventListener('click', function () {
+  if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; $('#btn-install').classList.add('hide'); }
+  else { toast('Choose "Add to Home screen" from Chrome’s ⋮ menu.'); }
+});
+window.addEventListener('appinstalled', function () { $('#btn-install').classList.add('hide'); toast('The app is added to your home screen.'); });
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(function () { }); }
+</script>
+<script>document.addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-eye]"):null;if(!b)return;var i=document.getElementById(b.getAttribute("data-eye"));if(!i)return;var show=i.type==="password";i.type=show?"text":"password";b.textContent=show?"\ud83d\ude48":"\ud83d\udc41";});</script>
+<script>
+/* ===== Owner setup + recovery (patched) ===== */
+(function () {
+  function legacyDefault(h){ try { return !!(h && h === BF.sha256('Admin@12345')); } catch(e){ return false; } }
+  function adminRec(){ try { return BF.S().members.filter(function(m){return m.is_admin;})[0] || null; } catch(e){ return null; } }
+  function needsSetup(){ var a=adminRec(); if(!a){return true;} if(!a.pass){return true;} return legacyDefault(a.pass); }
+  function removeWelcome(){ var w=document.getElementById('bf-welcome'); if(w&&w.parentNode){w.parentNode.removeChild(w);} }
+  function closeSetup(){ var d=document.getElementById('bf-setup'); if(d&&d.parentNode){d.parentNode.removeChild(d);} }
+  function openSetup(reset){
+    if(document.getElementById('bf-setup')){return;}
+    removeWelcome();
+    var d=document.createElement('div');
+    d.id='bf-setup';
+    d.style.cssText='position:fixed;inset:0;z-index:300;background:#0b0b0b;padding:18px;overflow:auto';
+    d.innerHTML='<div class="card" style="margin-top:28px">'
+      +'<h2>'+(reset?'Create a new owner password':'First time: create the owner password')+'</h2>'
+      +'<p class="hint" style="margin-top:0">'+(reset?'Only the owner password changes on this phone. Members, tokens and pending applications stay safe.':'This app ships with no pre-set password. Create your own now \u2014 this is what you will use for owner login.')+'</p>'
+      +'<label>New owner password (4 or more characters)</label><div class="pw"><input id="setup-p1" type="password" autocomplete="new-password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="setup-p1">\ud83d\udc41</button></div>'
+      +'<label>Password again</label><div class="pw"><input id="setup-p2" type="password" autocomplete="new-password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"><button type="button" class="eye" data-eye="setup-p2">\ud83d\udc41</button></div>'
+      +'<button class="gold" id="setup-go">Save owner password</button>'
+      +(reset?'':'<button id="setup-later" style="width:100%;margin-top:8px;padding:12px;border-radius:12px;border:1px solid #4a3d18;background:transparent;color:#e8dcc0;font-size:14px">Later</button>')
+      +'<div class="warn">No email reset \u2014 write this password down. Owner username is <b>Owner</b> (or 0).</div></div>';
+    document.body.appendChild(d);
+    document.getElementById('setup-go').addEventListener('click',function(){
+      var r=BF.setAdminPassword(document.getElementById('setup-p1').value,document.getElementById('setup-p2').value);
+      if(!r.ok){alert(r.msg);return;}
+      try{localStorage.setItem('bf_seen_welcome','1');localStorage.setItem('bf_remember_user','Owner');}catch(e){}
+      location.reload();
+    });
+    var lt=document.getElementById('setup-later'); if(lt){lt.addEventListener('click',function(){closeSetup();});}
+  }
+  window.bfOpenOwnerSetup=function(){ openSetup(true); };
+  try {
+    var of=BF.find;
+    BF.find=function(u){
+      var s=String(u==null?'':u).trim();
+      if(/^(owner|admin|administrator|admin\s*\(owner\)|0)$/i.test(s)){ s='0'; }
+      return of(s);
+    };
+  } catch(e){}
+  try {
+    var lb=document.getElementById('login-btn');
+    if(lb){ lb.addEventListener('click',function(){ setTimeout(function(){
+      var t=document.getElementById('toast'); var u=(document.getElementById('login-user')||{}).value||'';
+      if(t && /Wrong password/i.test(t.textContent) && /^(owner|admin|admin\s*\(owner\)|0)$/i.test(String(u).trim())){
+        t.textContent='No owner password matched. A "Create a new owner password" box is opening on your screen - type 4+ characters twice and press Save.';
+        try{ openSetup(true); var _p=document.getElementById('setup-p1'); if(_p){_p.focus();} }catch(e){}
+      }},80); }); }
+  } catch(e){}
+  try { if(localStorage.getItem('bf_seen_welcome')==='1'){ removeWelcome(); } } catch(e){}
+  try { if(needsSetup()){ setTimeout(function(){ openSetup(false); },40); } } catch(e){}
+  try {
+    var host=document.getElementById('v-login');
+    if(host && !document.getElementById('bf-owner-setup')){
+      var box=document.createElement('div');
+      box.id='bf-owner-setup';
+      box.style.cssText='margin:14px 0 0;padding:12px;border:1px dashed #6b5a20;border-radius:12px;font-size:13px;line-height:1.6;color:#e8dcc0;background:#141106';
+      box.innerHTML='<b>Owner?</b> If the owner password is not accepted, or you never created one, set a new owner password here. Members and pending applications are not affected.'
+        +'<button class="gold" id="bf-owner-setup-btn" style="margin-top:10px;width:100%">Create / reset owner password</button>';
+      host.appendChild(box);
+      document.getElementById('bf-owner-setup-btn').addEventListener('click',function(){ openSetup(true); });
+    }
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
