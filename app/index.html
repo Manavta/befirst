@@ -531,6 +531,7 @@ var BF = (function () {
       wallets: [], primary: '', locked: false, approved: false, claimed: 0, is_admin: false, created: isoNow(), sec: (p.sec || null) };
     if (p.addr) { m.wallets.push(p.addr); m.primary = p.addr; }
     S.members.push(m); S.pending.splice(i, 1);
+    try{ if(window.bfPublish) window.bfPublish({kind:'member',num:String(num),name:m.name,email:m.email,addr:(p.addr||''),pass:m.pass,sec:(m.sec||null),tokens:m.tokens,at:m.created}); }catch(e){}
     var msg = 'Member #' + num + ' approved — ' + p.name + ' got ' + inr(DEFAULT_ALLOC) + ' tokens' + (p.addr ? ' (wallet linked)' : '');
     log(msg, 'admin'); save();
     return { ok: true, msg: msg, num: num };
@@ -540,6 +541,7 @@ var BF = (function () {
     for (var k = 0; k < S.pending.length; k++) if (S.pending[k].id === id) { i = k; break; }
     if (i < 0) return { ok: false, msg: 'Application not found.' };
     var p = S.pending.splice(i, 1)[0];
+    try{ if(window.bfPublish) window.bfPublish({kind:'reject',email:p.email,name:p.name}); }catch(e){}
     log('Application rejected: ' + p.name + ' (' + p.email + ')', 'admin'); save();
     return { ok: true, msg: p.name + ' — application was rejected.' };
   }
@@ -1319,6 +1321,23 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
   }
   setTimeout(loadPull, 1500); setTimeout(loadPull, 8000); setTimeout(loadPull, 16000);
 })();
+</script>
+
+<script>
+/* BITFIRST shared publish (demo @restful-api.dev) */
+window.bfPublish=function(item){
+  try{
+    if(typeof MODE==='undefined'||MODE==='off'||!URL) return;
+    fetch(URL+(URL.indexOf('?')<0?'?':'&')+'t='+Date.now(),{cache:'no-store'})
+     .then(function(r){return r.json();})
+     .then(function(j){ var a=(j&&j.data)?j.data:[]; if(!Array.isArray(a)) a=[];
+        a=a.filter(function(x){ return !(x&&x.kind==='app'&&item.kind==='member'&&String(x.email||'').toLowerCase()===String(item.email||'').toLowerCase()); });
+        a.push(item);
+        return fetch(URL,{method:'PUT',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({name:'bitfirst',data:a.slice(-400)})});
+     }).catch(function(){});
+  }catch(e){}
+};
 </script>
 </body>
 </html>
