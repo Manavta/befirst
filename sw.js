@@ -1,5 +1,5 @@
 /* BITFIRST service worker - network first for the page, cache for offline */
-var CACHE = 'bitfirst-v5';
+var CACHE = 'bitfirst-v6';
 self.addEventListener('install', function () { self.skipWaiting(); });
 self.addEventListener('activate', function (e) {
   e.waitUntil((async function () {

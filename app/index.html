@@ -1186,13 +1186,13 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
 /* bf-sync-v1 : BITFIRST shared applications */
 (function(){
   var KEY='bitfirst_pwa_v1', MODE='log', URL='', TOPIC='bitfirst-apps-yszkgf7';
-  var cache={t:0,doc:null};
+  var cache={t:0,doc:null}, lastErr='', autoTry=0;
   function S(){ try{ return BF.S(); }catch(e){ return null; } }
   function low(x){ return String(x==null?'':x).toLowerCase().trim(); }
   function nowISO(){ var d=new Date(); function p(n){ return (n<10?'0':'')+n; } return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); }
   function saveNow(){ try{ localStorage.setItem(KEY, JSON.stringify(BF.S())); }catch(e){} }
   function readAll(){
-    if(MODE==='log'){ return fetch('https://ntfy.sh/'+TOPIC+'/json?poll=1&since=12h&t='+Date.now(),{cache:'no-store'})
+    if(MODE==='log'){ return fetch('https://ntfy.sh/'+TOPIC+'/json?poll=1&since=all&t='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}})
         .then(function(r){ return r.text(); }).then(function(t){ var out=[];
           String(t||'').split('\n').forEach(function(line){ if(!line) return;
             try{ var m=JSON.parse(line); if(!m||!m.message) return; var o=JSON.parse(m.message); if(o&&o.kind) out.push(o); }catch(e){} });
@@ -1207,7 +1207,12 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
   }
   function read(){ var n=Date.now();
     if(cache.doc && (n-cache.t)<4000) return Promise.resolve(cache.doc);
-    return readAll().then(function(a){ cache.doc=a||[]; cache.t=n; return cache.doc; }).catch(function(){ return cache.doc||[]; }); }
+    lastErr='';
+    function once(){ return readAll(); }
+    return once().catch(function(e){ lastErr=String((e&&e.message)||e).slice(0,70); return null; })
+      .then(function(a){ if(a) return a;
+        return new Promise(function(ok){ setTimeout(ok,2000); }).then(once).catch(function(e){ lastErr=String((e&&e.message)||e).slice(0,70); return null; }); })
+      .then(function(a){ a=a||cache.doc||[]; cache.doc=a; cache.t=Date.now(); return a; }); }
   function send(item){
     if(MODE==='log') return fetch('https://ntfy.sh/'+TOPIC,{method:'POST',body:JSON.stringify(item)})
       .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); cache.doc=null; return r; });
@@ -1291,12 +1296,13 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
     _ra.apply(null,arguments);
     if(MODE==='off'){ bar('Server sync: <b>OFF</b> \u2014 applications stay only on this phone.'); return; }
     bar('Server sync: checking\u2026');
-    read().then(function(items){ var apps=(items||[]).filter(function(x){ return x.kind==='app'; }); var n=merge(items);
-      bar('Server sync: <b>ON</b> \u00b7 applications waiting on the server: <b>'+apps.length+'</b> \u00b7 checked '+nowISO()
+    read(true).then(function(items){ var apps=(items||[]).filter(function(x){ return x.kind==='app'; }); var n=merge(items);
+      bar('Server sync: <b>'+(lastErr?'ERROR':'ON')+'</b> \u00b7 applications waiting on the server: <b>'+apps.length+'</b>'+((lastErr)?' \u00b7 reason: <b>'+esc(lastErr)+'</b>':' \u00b7 checked '+nowISO())
         +' <button id="bf-syncbtn" style="margin-left:6px;padding:5px 11px;border:1px solid #b8860b;border-radius:8px;background:#0b0b0b;color:#f7d774;font-weight:600">Refresh now</button>');
       var b=document.getElementById('bf-syncbtn');
-      if(b) b.addEventListener('click', function(){ cache.doc=null; window.renderAdmin(); });
-      if(n) _ra.apply(null,arguments); });
+      if(b) b.addEventListener('click', function(){ cache.doc=null; autoTry=0; window.renderAdmin(); });
+      if(n) _ra.apply(null,arguments);
+      if(!apps.length && autoTry<4){ autoTry++; setTimeout(function(){ cache.doc=null; window.renderAdmin(); }, 5000); } });
   };
   function loadPull(){
     if(MODE==='off') return;
@@ -1310,7 +1316,7 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').ca
           if(t) t.innerHTML=isMem?'\u2705 Your application is <b>approved</b> \u2014 log in now with your email and password.':(isP?'\u23f3 Your application is <b>waiting for the owner approval</b>.':''); } }catch(e){}
       if(n){ try{ render(); }catch(e){} } });
   }
-  setTimeout(loadPull, 1200);
+  setTimeout(loadPull, 1500); setTimeout(loadPull, 8000); setTimeout(loadPull, 16000);
 })();
 </script>
 </body>
